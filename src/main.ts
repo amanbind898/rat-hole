@@ -1,4 +1,4 @@
-import { Application, Text, Graphics, Ticker } from "pixi.js";
+import { Application, Text, Graphics, Ticker, Assets ,Sprite} from "pixi.js";
 import './style.css'
 
 (async () => {
@@ -11,7 +11,7 @@ import './style.css'
     });
 
     document.body.appendChild(app.canvas);
-
+globalThis.__PIXI_APP__ = app;
     const title = new Text({text: "rat hole game",style: {fontSize: 32}});
     title.position.set(550,20);
     app.stage.addChild(title);
@@ -19,7 +19,7 @@ import './style.css'
     const score = new Text({text: "score : 00",style: {fontSize: 32}});
     score.position.set(50,20);
     app.stage.addChild(score);
-   
+   await Assets.load([{alias:'burrow',src:'burrow.png'},{alias:'rat',src:'rat.png'}])
     let x = 500;
     let y = 150;
     let space = 150;
@@ -30,17 +30,41 @@ import './style.css'
     for (let i = 0; i < 9; i++) {
         let row = Math.floor(i / 3);
         let col = i % 3;
-        const hole = new Graphics();
-        hole.circle(x+col*space,y+row*space,50).fill("#000000");
-        holes.push(hole);
-        app.stage.addChild(hole);
+    
+        // const hole = new Graphics();
+        // hole.circle(x+col*space,y+row*space,50).fill("#000000");
+        // holes.push(hole);
+        // app.stage.addChild(hole);
+
+        const hole = Sprite.from('burrow');
+
+hole.anchor.set(0.5);
+hole.x = x + col * space;
+hole.y = y + row * space;
+hole.width = 100;
+hole.height = 100;
+holes.push(hole);
+app.stage.addChild(hole);
       
     }
   
     function spawnRat(X:number,Y:number){
   
-    const rat = new Graphics().circle(X,Y,30).fill("#ebc10a");
+    // const rat = new Graphics().circle(X,Y,30).fill("#ebc10a");
+    // app.stage.addChild(rat);
+
+        const rat = Sprite.from('rat');
+
+    rat.anchor.set(0.5,0.8);
+
+    rat.x = X;
+    rat.y = Y;
+
+    rat.width = 100;
+    rat.height = 100;
+
     app.stage.addChild(rat);
+
 
 
      rat.eventMode="static";
